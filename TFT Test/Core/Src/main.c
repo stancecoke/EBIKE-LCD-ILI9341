@@ -59,6 +59,7 @@ uint16_t percent = 0;
 uint16_t tempPercent;
 uint16_t tempClock;
 char trans_str[64] = {0,};
+char Temp_Buffer_text[40];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -109,10 +110,11 @@ int main(void)
   /* USER CODE BEGIN 2 */
   ILI9341_Init();//initial driver setup to drive ili9341
   ILI9341_Fill_Screen(BLACK);
-  		//ILI9341_Draw_Image((const char*)lcd_tft, SCREEN_HORIZONTAL_1);
-  		ILI9341_Set_Rotation(SCREEN_HORIZONTAL_1);
-  		ILI9341_Draw_Text("20:85", 50, 80, WHITE, 3, BLUE);
-  		ILI9341_DrawText("20:85", BIGFONT, 50, 100, WHITE, BLUE);
+  ILI9341_Set_Rotation(SCREEN_HORIZONTAL_1);
+  ILI9341_DrawText("DrawText FONT3", FONT3, 10, 25, WHITE, BLACK); //DrawText uses Fonts from fonts.h / fonts.c
+  ILI9341_DrawText("DrawText FONT2", FONT2, 10, 40, WHITE, BLACK);
+  ILI9341_Draw_Text("Size 1 Test", 10, 55, WHITE, 1, BLACK); //Draw_Text uses 5x5_font.h
+  ILI9341_Draw_Text("Size 2 Test", 10, 70, WHITE, 2, BLACK);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -120,19 +122,15 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+HAL_Delay(200);
     /* USER CODE BEGIN 3 */
 clock();
 checkBattery();
-ILI9341_Draw_Horizontal_Line(0,24,320,CYAN);
-ILI9341_Draw_Horizontal_Line(0,25,320,CYAN);
+
+//ILI9341_Draw_Text("Hallo Welt", FONT3, 10, 35, WHITE, BLACK);
 
 
 }
-
-
-//ILI9341_Draw_Text(j, 50, 60, WHITE, 1, BLACK);
-
 
   /* USER CODE END 3 */
 }
