@@ -225,15 +225,15 @@ void ILI9341_Draw_Filled_Rectangle_Coord(uint16_t X0, uint16_t Y0, uint16_t X1, 
 void ILI9341_DrawText(const char* str, const uint8_t font[], uint16_t X, uint16_t Y, uint16_t Colour, uint16_t Background_Colour)
 {
 	uint8_t charWidth;			/* Width of character */
-	uint8_t fOffset = font[0];	/* Offset of character */
+	uint16_t fOffset = font[0];	/* Offset of character */
 	uint8_t fWidth = font[1];	/* Width of font */
-
+	//fOffset=337;
 	while (*str)
 	{
 		ILI9341_DrawChar(*str, font, X, Y, Colour, Background_Colour);
 
 		/* Check character width and calculate proper position */
-		uint8_t *tempChar = (uint8_t*)&font[((*str - 0x20) * fOffset) + 4];
+		uint16_t *tempChar = (uint16_t*)&font[((*str - 0x20) * fOffset) + 4];
 		charWidth = tempChar[0];
 
 		if(charWidth + 2 < fWidth)
@@ -253,13 +253,15 @@ void ILI9341_DrawChar(char ch, const uint8_t font[], uint16_t X, uint16_t Y, uin
 {
 	if ((ch < 31) || (ch > 127)) return;
 
-	uint8_t fOffset, fWidth, fHeight, fBPL;
+	uint16_t fOffset, fWidth, fHeight, fBPL;
 	uint8_t *tempChar;
 
 	fOffset = font[0];
+	//fOffset=337;
 	fWidth = font[1];
 	fHeight = font[2];
 	fBPL = font[3];
+	uint16_t temp;
 
 	tempChar = (uint8_t*)&font[((ch - 0x20) * fOffset) + 4]; /* Current Character = Meta + (Character Index * Offset) */
 
@@ -269,14 +271,57 @@ void ILI9341_DrawChar(char ch, const uint8_t font[], uint16_t X, uint16_t Y, uin
 	for (int j=0; j < fHeight; j++)
 	{
 		for (int i=0; i < fWidth; i++)
-		{
-			uint8_t z =  tempChar[fBPL * i + ((j & 0xF8) >> 3) + 1]; /* (j & 0xF8) >> 3, increase one by 8-bits */
+		{temp=fBPL * i + ((j & 0xF8) >> 3);
+			uint8_t z =  tempChar[ temp  + 1]; /* (j & 0xF8) >> 3, increase one by 8-bits */
 			uint8_t b = 1 << (j & 0x07);
 			if (( z & b ) != 0x00)
 			{
 				ILI9341_Draw_Pixel(X+i, Y+j, Colour);
 			}
 		}
+	}
+}
+
+void ILI9341_DrawBigNumber(char ch, const uint8_t font[], uint16_t X, uint16_t Y, uint16_t Colour, uint16_t Background_Colour)
+{
+	if ((ch < 31) || (ch > 127)) return;
+
+	uint16_t fOffset, fWidth, fHeight, fBPL;
+	uint8_t *tempChar;
+
+	fOffset = font[0];
+	fOffset=433;
+	fWidth = font[1];
+	fHeight = font[2];
+	fBPL = font[3];
+
+
+	tempChar = (uint8_t*)&font[((ch - 0x30) * fOffset) + 5]; /* Current Character = Meta + (Character Index * Offset) Zeiger auf das gewünschte Zeichen */
+
+	/* Clear background first */
+	ILI9341_Draw_Rectangle(X, Y, fWidth+4, fHeight, Background_Colour);
+/*
+	for (int j=0; j < fHeight; j++)
+	{//Index vom Pointer größer 255 geht nicht
+		for (int i=0; i < fWidth; i++)
+		{   temp=fBPL * i + ((j & 0xF8) >> 3) + 1;
+
+			uint8_t z =  tempChar[i]; // (j & 0xF8) >> 3, increase one by 8-bits
+			uint8_t b = 1 << (j & 0x07);
+			*/
+
+	//Idee: Spaltenweise abarbeiten
+	for (int i=0; i < fWidth; i++){
+		for(int j=0; j < fBPL; j++){
+			uint8_t z =  tempChar[j];
+			for(int k=0; k < 8; k++){
+				 if ((z>>k)&1)
+				{
+					ILI9341_Draw_Pixel(X+i, Y+8*j+k, Colour);
+				}
+			}
+		}
+		tempChar += fBPL;
 	}
 }
 

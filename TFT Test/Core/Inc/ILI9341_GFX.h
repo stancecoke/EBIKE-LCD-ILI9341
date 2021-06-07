@@ -62,7 +62,7 @@ void ILI9341_Draw_Text(const char* Text, uint8_t X, uint8_t Y, uint16_t Colour, 
 void ILI9341_Draw_Filled_Rectangle_Size_Text(uint16_t X0, uint16_t Y0, uint16_t Size_X, uint16_t Size_Y, uint16_t Colour);
 void ILI9341_DrawChar(char ch, const uint8_t font[], uint16_t X, uint16_t Y, uint16_t Colour, uint16_t Background_Colour);
 void ILI9341_DrawText(const char* str, const uint8_t font[], uint16_t X, uint16_t Y, uint16_t Colour, uint16_t Background_Colour);
-
+void ILI9341_DrawBigNumber(char ch, const uint8_t font[], uint16_t X, uint16_t Y, uint16_t Colour, uint16_t Background_Colour);
 //USING CONVERTER: http://www.digole.com/tools/PicturetoC_Hex_converter.php
 //65K colour (2Bytes / Pixel)
 void ILI9341_Draw_Image(const char* Image_Array, uint8_t Orientation);
