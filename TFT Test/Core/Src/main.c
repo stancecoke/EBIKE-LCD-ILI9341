@@ -23,6 +23,7 @@
 #include "rtc.h"
 #include "spi.h"
 #include "tim.h"
+#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -108,6 +109,7 @@ int main(void)
   MX_ADC1_Init();
   MX_RTC_Init();
   MX_TIM1_Init();
+  MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
   ILI9341_Init();//initial driver setup to drive ili9341
   ILI9341_Fill_Screen(BLACK);
@@ -124,10 +126,11 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-HAL_Delay(500);
+
     /* USER CODE BEGIN 3 */
-clock();
-checkBattery();
+	  HAL_Delay(500);
+	  clock();
+	  checkBattery();
 
 //ILI9341_Draw_Text("Hallo Welt", FONT3, 10, 35, WHITE, BLACK);
 

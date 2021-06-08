@@ -66,6 +66,14 @@ void Error_Handler(void);
 #define CS_GPIO_Port GPIOB
 #define DC_Pin GPIO_PIN_14
 #define DC_GPIO_Port GPIOB
+#define Power_Button_Pin GPIO_PIN_8
+#define Power_Button_GPIO_Port GPIOA
+#define Light_Button_Pin GPIO_PIN_9
+#define Light_Button_GPIO_Port GPIOA
+#define Up_Button_Pin GPIO_PIN_10
+#define Up_Button_GPIO_Port GPIOA
+#define Down_Button_Pin GPIO_PIN_11
+#define Down_Button_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
