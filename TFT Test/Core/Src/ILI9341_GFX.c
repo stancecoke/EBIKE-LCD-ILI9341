@@ -282,21 +282,49 @@ void ILI9341_DrawChar(char ch, const uint8_t font[], uint16_t X, uint16_t Y, uin
 	}
 }
 
-void ILI9341_DrawBigNumber(char ch, const uint8_t font[], uint16_t X, uint16_t Y, uint16_t Colour, uint16_t Background_Colour)
+void ILI9341_DrawBigNumber(const char* str, const uint8_t font[], uint16_t X, uint16_t Y, uint16_t Colour, uint16_t Background_Colour)
+{
+	uint8_t charWidth;			/* Width of character */
+	uint16_t fOffset = (font[0]<<8)+font[1];	/* Offset of character */
+	uint8_t fWidth = font[2];	/* Width of font */
+
+	while (*str)
+	{
+		ILI9341_DrawBigNumericalCharakter(*str, font, X, Y, Colour, Background_Colour);
+
+		/* Check character width and calculate proper position */
+		uint8_t *tempChar = (uint8_t*)&font[((*str - 0x30) * fOffset) + 5];
+		charWidth = tempChar[0];
+
+		if(charWidth + 2 < fWidth)
+		{
+			/* If character width is smaller than font width */
+			X += (charWidth + 2);
+		}
+		else
+		{
+			X += fWidth;
+		}
+
+		str++;
+	}
+}
+
+void ILI9341_DrawBigNumericalCharakter(char ch, const uint8_t font[], uint16_t X, uint16_t Y, uint16_t Colour, uint16_t Background_Colour)
 {
 	if ((ch < 31) || (ch > 127)) return;
 
 	uint16_t fOffset, fWidth, fHeight, fBPL;
 	uint8_t *tempChar;
 
-	fOffset = font[0];
-	fOffset=433;
-	fWidth = font[1];
-	fHeight = font[2];
-	fBPL = font[3];
+	fOffset = (font[0]<<8)+font[1];
+
+	fWidth = font[2];
+	fHeight = font[3];
+	fBPL = font[4];
 
 
-	tempChar = (uint8_t*)&font[((ch - 0x30) * fOffset) + 5]; /* Current Character = Meta + (Character Index * Offset) Zeiger auf das gewünschte Zeichen */
+	tempChar = (uint8_t*)&font[((ch - 0x30) * fOffset) + 6]; // Current Character = Meta + (Character Index * Offset) Zeiger auf das gewünschte Zeichen
 
 	/* Clear background first */
 	ILI9341_Draw_Rectangle(X, Y, fWidth+4, fHeight, Background_Colour);
