@@ -1,19 +1,25 @@
 #include "main.h"
 #include "buttons.h"
+#include "gpio.h"
 
 static button_state_t ButtonState = Nothing;
 
 button_state_t button_processing(void)
 {
+static uint16_t portstate;
+portstate = (GPIOA->IDR>>8)&0x0F;
 
-	  if(!HAL_GPIO_ReadPin (Up_Button_GPIO_Port, Up_Button_Pin))
-	  {
+switch(portstate)
+{
+    case ShortPressUp:
+    	ButtonState=ShortPressUp;
+        break;
+    case Nothing:
+    	ButtonState=Nothing;
+		break;
+    default:
 
-		  ButtonState = ShortPressUp;
-	  }
-	  else
-	  {
-		  ButtonState = Nothing;
-	  }
+        break;
+}
 	  return ButtonState;
 }

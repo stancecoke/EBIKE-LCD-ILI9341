@@ -61,7 +61,7 @@ uint16_t percent = 0;
 uint16_t tempPercent;
 uint16_t tempClock;
 uint16_t timer1_counter;
-uint8_t button_state_old=0;
+static button_state_t button_state_old = Nothing;
 uint16_t batsympos[2]= {190,5};
 char trans_str[64] = {0,};
 char Temp_Buffer_text[40];
