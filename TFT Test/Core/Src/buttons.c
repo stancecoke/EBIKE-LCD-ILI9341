@@ -1,16 +1,19 @@
 #include "main.h"
+#include "buttons.h"
 
-uint16_t button_processing(void)
+static button_state_t ButtonState = Nothing;
+
+button_state_t button_processing(void)
 {
-	static int state;
+
 	  if(!HAL_GPIO_ReadPin (Up_Button_GPIO_Port, Up_Button_Pin))
 	  {
 
-		  state = 1;
+		  ButtonState = ShortPressUp;
 	  }
 	  else
 	  {
-		  state = 0;
+		  ButtonState = Nothing;
 	  }
-	  return state;
+	  return ButtonState;
 }

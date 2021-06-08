@@ -145,14 +145,21 @@ int main(void)
 	  timer1_counter=0;
 	}
 
-	if(button_processing()){
-		if(!button_state_old)ILI9341_DrawBigNumber("1", BIGFONT,10, 150, WHITE, BLACK);
-		button_state_old=1;
-	}
-	else{
-		if(button_state_old)ILI9341_DrawBigNumber("0", BIGFONT,10, 150, WHITE, BLACK);
-		button_state_old=0;
-	}
+
+    switch(button_processing())
+    {
+        case ShortPressUp:
+    		if(!button_state_old)ILI9341_DrawBigNumber("1", BIGFONT,10, 150, WHITE, BLACK);
+    		button_state_old=1;
+            break;
+        case Nothing:
+    		if(button_state_old)ILI9341_DrawBigNumber("0", BIGFONT,10, 150, WHITE, BLACK);
+    		button_state_old=0;
+    		break;
+        default:
+
+            break;
+    }
 
 
 }

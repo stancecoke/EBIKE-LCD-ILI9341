@@ -7,7 +7,7 @@
 
 #ifndef INC_BUTTONS_H_
 #define INC_BUTTONS_H_
-
-uint16_t button_processing(void);
+typedef enum {Nothing, ShortPressPower, ShortPressLight, ShortPressUp, ShortPressDown} button_state_t;
+button_state_t button_processing(void);
 
 #endif /* INC_BUTTONS_H_ */
