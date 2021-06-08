@@ -30,6 +30,7 @@
 /* USER CODE BEGIN Includes */
 #include "ILI9341_STM32_Driver.h"
 #include "ILI9341_GFX.h"
+#include "buttons.h"
 #include <stdio.h>
 
 /* USER CODE END Includes */
@@ -59,6 +60,8 @@ uint16_t i;
 uint16_t percent = 0;
 uint16_t tempPercent;
 uint16_t tempClock;
+uint16_t timer1_counter;
+uint8_t button_state_old=0;
 uint16_t batsympos[2]= {190,5};
 char trans_str[64] = {0,};
 char Temp_Buffer_text[40];
@@ -119,6 +122,14 @@ int main(void)
   //ILI9341_DrawText("123", BIGFONT, 10, 40, WHITE, BLACK);
   //ILI9341_Draw_Text("Size 1 Test", 10, 55, WHITE, 1, BLACK); //Draw_Text uses 5x5_font.h
  // ILI9341_Draw_Text("Size 2 Test", 10, 70, WHITE, 2, BLACK);
+
+  // Start Timer 1
+     if(HAL_TIM_Base_Start_IT(&htim1) != HAL_OK)
+       {
+         /* Counter Enable Error */
+         Error_Handler();
+       }
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -128,11 +139,20 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  HAL_Delay(500);
+	if(timer1_counter>500){
 	  clock();
 	  checkBattery();
+	  timer1_counter=0;
+	}
 
-//ILI9341_Draw_Text("Hallo Welt", FONT3, 10, 35, WHITE, BLACK);
+	if(button_processing()){
+		if(!button_state_old)ILI9341_DrawBigNumber("1", BIGFONT,10, 150, WHITE, BLACK);
+		button_state_old=1;
+	}
+	else{
+		if(button_state_old)ILI9341_DrawBigNumber("0", BIGFONT,10, 150, WHITE, BLACK);
+		button_state_old=0;
+	}
 
 
 }
@@ -257,6 +277,15 @@ void clock()
 		       //  snprintf(trans_str, 63, "Date %d-%d-20%d\n", DateToUpdate.Date, DateToUpdate.Month, DateToUpdate.Year);
 		       //  ILI9341_Draw_Text(trans_str, 10, 30, WHITE, 2, BLACK);
 		         //HAL_Delay(1000);
+}
+
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+	if (htim == &htim1) {
+		timer1_counter++;
+		//ILI9341_DrawBigNumber("1", BIGFONT,10, 150, WHITE, BLACK);
+	}
 }
 /* USER CODE END 4 */
 
