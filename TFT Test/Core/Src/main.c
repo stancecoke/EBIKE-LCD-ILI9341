@@ -119,6 +119,8 @@ int main(void)
   ILI9341_Set_Rotation(SCREEN_VERTICAL_1);
   ILI9341_DrawText("EBiCS Display", FONT3, 10, 25, WHITE, BLACK); //DrawText uses Fonts from fonts.h / fonts.c
   ILI9341_DrawBigNumber("456", BIGFONT,10, 50, WHITE, BLACK);
+  ILI9341_DrawBigNumber(";", BIGFONT,10, 250, YELLOW, BLACK);
+
   //ILI9341_DrawText("123", BIGFONT, 10, 40, WHITE, BLACK);
   //ILI9341_Draw_Text("Size 1 Test", 10, 55, WHITE, 1, BLACK); //Draw_Text uses 5x5_font.h
  // ILI9341_Draw_Text("Size 2 Test", 10, 70, WHITE, 2, BLACK);
@@ -160,6 +162,14 @@ int main(void)
     		if(button_state_old!=ShortPressDown)ILI9341_DrawText("ShortPressDown", FONT3, 10, 150, WHITE, BLACK);
     		button_state_old=ShortPressDown;
             break;
+        case LongPressDown:
+    		if(button_state_old!=LongPressDown)ILI9341_DrawText("LongPressDown", FONT3, 10, 150, WHITE, BLACK);
+    		button_state_old=LongPressDown;
+            break;
+        case ShortUpAndDown:
+    		if(button_state_old!=ShortUpAndDown)ILI9341_DrawText("ShortUpAndDown             ", FONT3, 10, 150, WHITE, BLACK);
+    		button_state_old=ShortUpAndDown;
+    		break;
         case LongUpAndDown:
     		if(button_state_old!=LongUpAndDown)ILI9341_DrawText("LongUpAndDown             ", FONT3, 10, 150, WHITE, BLACK);
     		button_state_old=LongUpAndDown;

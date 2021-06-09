@@ -19,9 +19,9 @@ typedef enum {
 	ShortLightAndDown = 9,
 	ShortLightAndUp = 5,
 	LongPressUp = ShortPressUp+16,
-	LongpressDown = ShortPressDown+16,
-	LongpressPower = ShortPressPower+16,
-	LongpressLight = ShortPressLight+16,
+	LongPressDown = ShortPressDown+16,
+	LongPressPower = ShortPressPower+16,
+	LongPressLight = ShortPressLight+16,
 	LongUpAndDown = ShortUpAndDown+16,
 	Unknown} button_state_t;
 button_state_t button_processing(void);
