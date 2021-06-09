@@ -161,11 +161,12 @@ int main(void)
     		button_state_old=ShortPressDown;
             break;
         case Nothing:
-    		if(button_state_old!=Nothing)ILI9341_DrawText("Nothing             ", FONT3, 10, 150, WHITE, BLACK);;
+    		if(button_state_old!=Nothing)ILI9341_DrawText("Nothing             ", FONT3, 10, 150, WHITE, BLACK);
     		button_state_old=Nothing;
     		break;
         default:
-
+        	if(button_state_old!=Unknown)ILI9341_DrawText("Unknown combination             ", FONT3, 10, 150, WHITE, BLACK);
+        	button_state_old=Unknown;
             break;
     }
 

@@ -19,27 +19,28 @@ switch(portstate)
 {
     case ShortPressUp:
     	ButtonState=ShortPressUp;
-    	if(LastButtonState!=ShortPressUp)StartTimeButtonUp =__HAL_TIM_GET_COUNTER(&htim1);
-    	LastButtonState=ShortPressUp;
+    	if(LastButtonState!=ShortPressUp&&!LongPressFlag)StartTimeButtonUp =__HAL_TIM_GET_COUNTER(&htim1);
+
         break;
     case ShortPressDown:
     	ButtonState=ShortPressDown;
     	if(LastButtonState!=ShortPressUp)StartTimeButtonDown =__HAL_TIM_GET_COUNTER(&htim1);
-    	LastButtonState=ShortPressDown;
+
         break;
     case Nothing:
     	ButtonState=Nothing;
-    	LastButtonState=Nothing;
+
     	StartTimeButtonUp = 0;
     	LongPressFlag=0;
 		break;
     default:
-
+    	ButtonState=Unknown;
         break;
 }
 
+
 	Now =__HAL_TIM_GET_COUNTER(&htim1);
-	if(StartTimeButtonUp){
+	if(StartTimeButtonUp&&ButtonState==ShortPressUp){
 		if (Now<StartTimeButtonUp&&!LongPressFlag){
 			if(((Now+60000)-StartTimeButtonUp)>15000){
 
@@ -50,11 +51,13 @@ switch(portstate)
 				LongPressFlag=1;
 			}
 		}
+
 		if(LongPressFlag)ButtonState=LongPressUp;
 
 	}
+	else StartTimeButtonUp = 0;
 
-
+	LastButtonState=ButtonState;
 
 	  return ButtonState;
 }
