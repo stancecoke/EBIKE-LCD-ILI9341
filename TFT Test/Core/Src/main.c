@@ -61,7 +61,7 @@ uint16_t percent = 0;
 uint16_t tempPercent;
 uint16_t tempClock;
 uint16_t timer1_counter;
-static button_state_t button_state_old = Nothing;
+static button_state_t button_state_old = 0;
 uint16_t batsympos[2]= {190,5};
 char trans_str[64] = {0,};
 char Temp_Buffer_text[40];
@@ -139,7 +139,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	if(timer1_counter>500){
+	if(timer1_counter){
 	  clock();
 	  checkBattery();
 	  timer1_counter=0;
@@ -149,12 +149,20 @@ int main(void)
     switch(button_processing())
     {
         case ShortPressUp:
-    		if(!button_state_old)ILI9341_DrawBigNumber("1", BIGFONT,10, 150, WHITE, BLACK);
-    		button_state_old=1;
+    		if(button_state_old!=ShortPressUp)ILI9341_DrawText("ShortPressUp      ", FONT3, 10, 150, WHITE, BLACK);
+    		button_state_old=ShortPressUp;
+            break;
+        case LongPressUp:
+    		if(button_state_old!=LongPressUp)ILI9341_DrawText("LongPressUp      ", FONT3, 10, 150, WHITE, BLACK);
+    		button_state_old=LongPressUp;
+            break;
+        case ShortPressDown:
+    		if(button_state_old!=ShortPressDown)ILI9341_DrawText("ShortPressDown", FONT3, 10, 150, WHITE, BLACK);
+    		button_state_old=ShortPressDown;
             break;
         case Nothing:
-    		if(button_state_old)ILI9341_DrawBigNumber("0", BIGFONT,10, 150, WHITE, BLACK);
-    		button_state_old=0;
+    		if(button_state_old!=Nothing)ILI9341_DrawText("Nothing             ", FONT3, 10, 150, WHITE, BLACK);;
+    		button_state_old=Nothing;
     		break;
         default:
 
