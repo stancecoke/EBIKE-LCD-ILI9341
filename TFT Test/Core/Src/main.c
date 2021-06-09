@@ -160,6 +160,10 @@ int main(void)
     		if(button_state_old!=ShortPressDown)ILI9341_DrawText("ShortPressDown", FONT3, 10, 150, WHITE, BLACK);
     		button_state_old=ShortPressDown;
             break;
+        case LongUpAndDown:
+    		if(button_state_old!=LongUpAndDown)ILI9341_DrawText("LongUpAndDown             ", FONT3, 10, 150, WHITE, BLACK);
+    		button_state_old=LongUpAndDown;
+    		break;
         case Nothing:
     		if(button_state_old!=Nothing)ILI9341_DrawText("Nothing             ", FONT3, 10, 150, WHITE, BLACK);
     		button_state_old=Nothing;
