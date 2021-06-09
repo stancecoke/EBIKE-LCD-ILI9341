@@ -8,6 +8,7 @@ static button_state_t LastButtonState = Nothing;
 static uint16_t StartTimes[15];
 static uint32_t Now;
 static uint8_t LongPressFlag[15];
+static uint8_t Result;
 TIM_HandleTypeDef htim1;
 
 button_state_t button_processing(void)
@@ -19,7 +20,9 @@ switch(portstate)
 {
     case ShortPressUp:
     	ButtonState=ShortPressUp;
-    	if(LastButtonState!=ShortPressUp&&!LongPressFlag[ShortPressUp])StartTimes[ButtonState] =__HAL_TIM_GET_COUNTER(&htim1);
+    	if(LastButtonState!=ShortPressUp&&!LongPressFlag[ShortPressUp]){
+    		StartTimes[ButtonState] =__HAL_TIM_GET_COUNTER(&htim1);
+    	}
 
         break;
     case ShortPressDown:
@@ -44,37 +47,47 @@ switch(portstate)
         break;
     case Nothing:
     	ButtonState=Nothing;
+    	Result=Nothing;
     	memset(StartTimes, 0, 15*sizeof(StartTimes[0]));
     	memset(LongPressFlag, 0, 15*sizeof(LongPressFlag[0]));
 
 		break;
     default:
     	ButtonState=Unknown;
+    	Result=Unknown;
         break;
 }
 
 
 	Now =__HAL_TIM_GET_COUNTER(&htim1);
 	for(int i = 0; i<16; i++){
-	if(StartTimes[i]&&ButtonState==i){
-		if (Now<StartTimes[i]&&!LongPressFlag[i]){
-			if(((Now+60000)-StartTimes[i])>15000){
-
-				LongPressFlag[i]=1;
-			}
-			else if((Now-StartTimes[i])>15000){
-
-				LongPressFlag[i]=1;
-			}
+	if(StartTimes[i]&&ButtonState==i&&LongPressFlag[i]!=2){
+		if (Now<StartTimes[i]){
+			if(((Now+60000)-StartTimes[i])>5000)LongPressFlag[i]=1;
+			if(((Now+60000)-StartTimes[i])>50000)LongPressFlag[i]=2;
+		}
+		if (Now>StartTimes[i]){
+			if((Now-StartTimes[i])>5000)LongPressFlag[i]=1;
+			if((Now-StartTimes[i])>50000)LongPressFlag[i]=2;
 		}
 
-		if(LongPressFlag[i])ButtonState=i+16;
+	}
+	else {
+		StartTimes[i] = 0;
 
 	}
-	else StartTimes[i] = 0;
+		if(LongPressFlag[i]==2){
+			Result=i+16;
+		}
+		else if(LongPressFlag[i]==1){
+			Result=i;
+		}
+
+
 	}
+
 
 	LastButtonState=ButtonState;
 
-	  return ButtonState;
+	  return Result;
 }
