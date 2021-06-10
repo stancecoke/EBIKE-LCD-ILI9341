@@ -328,15 +328,7 @@ void ILI9341_DrawBigNumericalCharakter(char ch, const uint8_t font[], uint16_t X
 
 	/* Clear background first */
 	ILI9341_Draw_Rectangle(X, Y, fWidth+4, fHeight, Background_Colour);
-/*
-	for (int j=0; j < fHeight; j++)
-	{//Index vom Pointer größer 255 geht nicht
-		for (int i=0; i < fWidth; i++)
-		{   temp=fBPL * i + ((j & 0xF8) >> 3) + 1;
 
-			uint8_t z =  tempChar[i]; // (j & 0xF8) >> 3, increase one by 8-bits
-			uint8_t b = 1 << (j & 0x07);
-			*/
 
 	//Idee: Spaltenweise abarbeiten
 	for (int i=0; i < fWidth; i++){
@@ -350,6 +342,44 @@ void ILI9341_DrawBigNumericalCharakter(char ch, const uint8_t font[], uint16_t X
 			}
 		}
 		tempChar += fBPL;
+	}
+}
+
+void ILI9341_DrawICON(char ch, const uint8_t font[], uint16_t X, uint16_t Y, uint16_t Colour, uint16_t Background_Colour)
+{
+	if ((ch < 31) || (ch > 127)) return;
+
+	uint16_t fOffset, fWidth, fHeight, fBPL;
+	uint8_t *tempChar;
+
+	fOffset = (font[0]<<8)+font[1];
+
+	fWidth = font[2];
+	fHeight = font[3];
+	fBPL = font[4];
+
+
+	tempChar = (uint8_t*)&font[((ch - 0x30) * fOffset) + 5]; // Current Character = Meta + (Character Index * Offset) Zeiger auf das gewünschte Zeichen
+
+	/* Clear background first */
+	ILI9341_Draw_Rectangle(X, Y, fWidth+4, fHeight, Background_Colour);
+
+
+	//Format aus Vertikaler Einstellung siehe https://javl.github.io/image2cpp/
+	for (int j=0; j < fBPL; j++){
+	for (int i=0; i < fWidth; i++){
+
+			uint8_t z =  tempChar[i];
+			for(int k=0; k < 8; k++){
+				 if ((z>>k)&1)
+				{
+					ILI9341_Draw_Pixel(X+i, Y+8*j+k, Colour);
+				}
+
+		}
+	}
+	tempChar += fWidth;
+
 	}
 }
 

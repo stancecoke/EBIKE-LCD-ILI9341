@@ -119,7 +119,7 @@ int main(void)
   ILI9341_Set_Rotation(SCREEN_VERTICAL_1);
   ILI9341_DrawText("EBiCS Display", FONT3, 10, 25, WHITE, BLACK); //DrawText uses Fonts from fonts.h / fonts.c
   ILI9341_DrawBigNumber("456", BIGFONT,10, 50, WHITE, BLACK);
-  ILI9341_DrawBigNumber(";", BIGFONT,10, 250, YELLOW, BLACK);
+  ILI9341_DrawICON(48, FONT5, 10, 250, WHITE, BLACK);
 
   //ILI9341_DrawText("123", BIGFONT, 10, 40, WHITE, BLACK);
   //ILI9341_Draw_Text("Size 1 Test", 10, 55, WHITE, 1, BLACK); //Draw_Text uses 5x5_font.h
